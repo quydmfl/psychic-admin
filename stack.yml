@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    image: react-prod
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    container_name: psychic-app
+    restart: unless-stopped
+    volumes:
+      - "./:/app"
+    ports:
+      - ${APP_FORWARD_PORT:-80}:80
+    networks:
+      - psychic-fe
+networks:
+  psychic-fe:
+    driver: bridge
