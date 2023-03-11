@@ -6,15 +6,13 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     platform: linux/arm64/v8
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
     restart: unless-stopped
     volumes:
       - ./:/usr/src/app
     expose:
       - "8080"
     ports:
-      - 8080:8080
+      - "8080:8080"
     command: >
       bash -c "npm i webpack-dev-server && npm start"
     networks:
