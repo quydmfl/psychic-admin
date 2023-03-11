@@ -1,0 +1,12 @@
+FROM node:19.6.0
+MAINTAINER <quydm.fl@gmail.com>
+
+# Setting directory app
+WORKDIR /usr/src/app
+
+# Copy package
+COPY package*.json ./
+RUN npm install
+
+# Copy source
+COPY . .

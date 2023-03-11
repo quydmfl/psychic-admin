@@ -5,7 +5,7 @@ services:
     image: react-prod
     build:
       context: .
-      dockerfile: .docker/Dockerfile
+      dockerfile: Dockerfile
     container_name: psychic-app
     restart: unless-stopped
     volumes:
