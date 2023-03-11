@@ -1,15 +1,27 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import { createRouter, createWebHistory } from 'vue-router'
+import DefaultLayout from '../layouts/DefaultLayout.vue'
+import LoginPage from '../views/LoginPage.vue'
+import AdminPage from '../views/AdminPage.vue'
 
-Vue.use(Router)
+const routes = [
+  {
+    path: '/',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/AdminPage.vue')
+      }
+    ]
+  },
+  { path: '/login', component: LoginPage },
+  { path: '/admin', component: AdminPage }
+]
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
-  ]
+const router = createRouter({
+  history: createWebHistory(),
+  routes
 })
+
+export default router
