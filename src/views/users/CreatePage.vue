@@ -10,35 +10,74 @@
               type="text"
               label="User name"
               placeholder="User name"
+              v-model="formData.name"
             />
+            <div
+              class="errors"
+              v-for="error of $v.name.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
             <!-- Email -->
             <CFormInput
               class="mb-3"
               type="text"
               label="Email"
               placeholder="Email"
+              v-model="formData.email"
             />
+            <div
+              class="errors"
+              v-for="error of $v.email.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
             <!-- Password -->
             <CFormInput
               class="mb-3"
               type="password"
               label="Password"
               placeholder="Password"
+              v-model="formData.password"
             />
+            <div
+              class="errors"
+              v-for="error of $v.password.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
             <!-- Confirm password -->
             <CFormInput
               class="mb-3"
               type="password"
               label="Confirm password"
               placeholder="Confirm password"
+              v-model="formData.confirmPassword"
             />
+            <div
+              class="errors"
+              v-for="error of $v.confirmPassword.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
             <!-- Roles -->
-            <CFormSelect class="mb-3" label="Role">
-              <option>Select role</option>
+            <CFormSelect v-model="formData.role" class="mb-3" label="Role">
+              <option value="">Select role</option>
               <option v-for="role in roles" :key="role.name" :value="role.name">
                 {{ role.displayName }}
               </option>
             </CFormSelect>
+            <div
+              class="errors"
+              v-for="error of $v.role.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
             <CButton color="primary" class="px-4" @click="submit">
               Add
             </CButton>
@@ -52,7 +91,15 @@
 <script setup>
 import { ref, inject } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, helpers } from '@vuelidate/validators'
+import { useRouter } from 'vue-router'
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  helpers
+} from '@vuelidate/validators'
+import UserService from '@/services/UserService'
 
 const ROLE_LIST = [
   {
@@ -73,7 +120,8 @@ const ROLE_LIST = [
   }
 ]
 
-const api = inject('api')
+const router = useRouter()
+
 const toast = inject('toast')
 const loading = inject('loading')
 
@@ -88,14 +136,30 @@ const formData = ref({
 })
 
 const formRules = {
-  name: { required: helpers.withMessage('Name is required', required) },
+  name: { required: helpers.withMessage('User name is required', required) },
   email: {
     required: helpers.withMessage('Email is required', required),
     email
   },
-  password: { required: helpers.withMessage('Password is required', required) },
+  password: {
+    required: helpers.withMessage('Password is required', required),
+    minLength: helpers.withMessage(
+      'Password must be more than 8 characters',
+      minLength(8)
+    ),
+    maxLength: helpers.withMessage(
+      'Password must be less than 32 characters',
+      maxLength(32)
+    )
+  },
   confirmPassword: {
-    required: helpers.withMessage('Confirm password is required', required)
+    required: helpers.withMessage('Confirm password is required', required),
+    sameAsPassword: helpers.withMessage(
+      'Confirm password must be equal to password',
+      (value) => {
+        return value ? formData.value.password === value : true
+      }
+    )
   },
   role: { required: helpers.withMessage('Role is required', required) }
 }
@@ -111,14 +175,20 @@ const submit = async () => {
     }
     loading.show()
 
-    const { data } = await api.post('/auth/login', {
-      email: formData.value.email,
-      password: formData.value.password
+    await UserService.createUser({
+      ...formData.value,
+      passwordConfirm: formData.value.confirmPassword
     })
-    console.log(data)
+    toast.success('Add user successfully')
+    router.push('/users')
   } catch (error) {
     if (error.response && error.response.data.error) {
       error.response.data.error.forEach((e) => toast.error(e.message))
+    } else if (
+      error.response &&
+      error.response.data.message === 'Validation error'
+    ) {
+      toast.error('Email already exists')
     } else {
       toast.error('Add user failed')
     }
@@ -128,4 +198,10 @@ const submit = async () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.errors {
+  width: 100%;
+  margin: 1rem 0;
+  color: red;
+}
+</style>
