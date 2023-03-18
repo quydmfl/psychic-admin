@@ -11,14 +11,17 @@
         <CNavItem>
           <CNavLink href="/dashboard"> Dashboard </CNavLink>
         </CNavItem>
+        <!--
         <CNavItem>
           <CNavLink href="#">Users</CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink href="#">Settings</CNavLink>
         </CNavItem>
+        -->
       </CHeaderNav>
       <CHeaderNav>
+        <!--
         <CNavItem>
           <CNavLink href="#">
             <CIcon class="mx-2" icon="cil-bell" size="lg" />
@@ -34,6 +37,7 @@
             <CIcon class="mx-2" icon="cil-envelope-open" size="lg" />
           </CNavLink>
         </CNavItem>
+        -->
         <AppHeaderDropdownAccnt />
       </CHeaderNav>
     </CContainer>

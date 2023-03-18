@@ -84,7 +84,8 @@ const AppSidebarNav = defineComponent({
           RouterLink,
           {
             to: item.to,
-            custom: true
+            class: 'text-decoration-none'
+            // custom: true
           },
           {
             default: (props) =>
@@ -92,7 +93,7 @@ const AppSidebarNav = defineComponent({
                 resolveComponent(item.component),
                 {
                   active: props.isActive,
-                  href: props.href,
+                  href: '#',
                   onClick: () => props.navigate()
                 },
                 {
