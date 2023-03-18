@@ -9,7 +9,7 @@
       </CHeaderBrand>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
-          <CNavLink href="/dashboard"> Dashboard </CNavLink>
+          <CNavLink href="/"> Dashboard </CNavLink>
         </CNavItem>
         <!--
         <CNavItem>

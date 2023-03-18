@@ -7,22 +7,26 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     name: '',
     email: '',
-    role: ''
+    role: '',
+    token: ''
   }),
   getters: {
     currentToken: (state) => {
-      if (VueCookies.isKey('token')) {
+      if (state.token) {
+        return state.token
+      } else if (VueCookies.isKey('token')) {
         return VueCookies.get('token')
       } else {
         return ''
       }
     },
     isAuthenticated: (state) => {
-      return VueCookies.isKey('token')
+      return state.token || VueCookies.isKey('token')
     }
   },
   actions: {
     setToken (_token) {
+      this.token = _token
       const decodedJwt = jwtDecode(_token)
       const expiredTime = decodedJwt.exp - decodedJwt.iat
       VueCookies.set('token', _token, `${expiredTime}s`)
@@ -39,6 +43,7 @@ export const useUserStore = defineStore('user', {
       } catch (error) {}
     },
     logout () {
+      this.token = ''
       VueCookies.remove('token')
     }
   }

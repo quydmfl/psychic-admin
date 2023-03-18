@@ -40,7 +40,9 @@
       <CDropdownItem>
         <CIcon icon="cil-shield-alt" /> Lock Account
       </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" @click="logout" /> Logout </CDropdownItem>
+      <CDropdownItem @click="logout">
+        <CIcon icon="cil-lock-locked" /> Logout
+      </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
@@ -50,13 +52,13 @@ import { useUserStore } from '@/store/user'
 import { useRouter } from 'vue-router'
 import avatar from '@/assets/images/avatars/8.jpg'
 
-const userStore = useUserStore()
 const router = useRouter()
 
 const itemsCount = 42
 // Methods
 const logout = () => {
+  const userStore = useUserStore()
   userStore.logout()
-  router.addRoutes().push('/login')
+  router.push('/login')
 }
 </script>
