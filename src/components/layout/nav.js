@@ -7,7 +7,8 @@ export default [
   },
   {
     component: 'CNavTitle',
-    name: 'Users'
+    name: 'Users',
+    hide: ['staff']
   },
   {
     component: 'CNavGroup',
@@ -25,7 +26,8 @@ export default [
         name: 'Add User',
         to: '/users/add'
       }
-    ]
+    ],
+    hide: ['staff']
   },
   {
     component: 'CNavTitle',

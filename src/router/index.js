@@ -8,12 +8,15 @@ const router = createRouter({
 })
 
 const whiteList = ['login']
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (whiteList.includes(to.name)) {
     next()
   } else {
-    const tokenStore = useUserStore()
-    if (tokenStore.isAuthenticated) {
+    const userStore = useUserStore()
+    if (userStore.isAuthenticated) {
+      if (!userStore.role) {
+        await userStore.setUserInfo()
+      }
       next()
     } else {
       router.push('/login')
