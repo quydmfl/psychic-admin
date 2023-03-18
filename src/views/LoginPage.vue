@@ -86,14 +86,14 @@
 </template>
 
 <script setup>
-import { inject, ref } from 'vue'
+import { onMounted, inject, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
 import { useUserStore } from '@/store/user'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
-const route = useRoute()
+const router = useRouter()
 
 const api = inject('api')
 const toast = inject('toast')
@@ -127,7 +127,7 @@ const submit = async () => {
       password: loginFormData.value.password
     })
     userStore.setToken(data.access_token)
-    route.push('/')
+    router.push('/')
   } catch (error) {
     if (error.response && error.response.data.error) {
       error.response.data.error.forEach((e) => toast.error(e.message))
@@ -138,6 +138,12 @@ const submit = async () => {
     loading.hide()
   }
 }
+
+onMounted(() => {
+  if (userStore.isAuthenticated) {
+    router.push('/')
+  }
+})
 </script>
 
 <style lang="scss" scoped>
