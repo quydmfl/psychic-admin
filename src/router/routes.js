@@ -22,7 +22,12 @@ const routes = [
         component: () => import('@/views/users/CreatePage.vue')
       },
       {
-        path: '/product/create',
+        path: '/products',
+        name: 'Product List',
+        component: () => import('@/views/products/ListPage.vue')
+      },
+      {
+        path: '/products/add',
         name: 'Add Product',
         component: () => import('@/views/products/CreatePage.vue')
       }

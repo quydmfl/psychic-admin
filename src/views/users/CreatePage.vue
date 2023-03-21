@@ -67,8 +67,8 @@
             <!-- Roles -->
             <CFormSelect v-model="formData.role" class="mb-3" label="Role">
               <option value="">Select role</option>
-              <option v-for="role in roles" :key="role.name" :value="role.name">
-                {{ role.displayName }}
+              <option v-for="role in roles" :key="role.id" :value="role.id">
+                {{ role.display_name }}
               </option>
             </CFormSelect>
             <div
@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject, onMounted } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { useRouter } from 'vue-router'
 import {
@@ -100,32 +100,14 @@ import {
   helpers
 } from '@vuelidate/validators'
 import UserService from '@/services/UserService'
-
-const ROLE_LIST = [
-  {
-    name: 'admin',
-    displayName: 'Admin'
-  },
-  {
-    name: 'manager',
-    displayName: 'Manager'
-  },
-  {
-    name: 'customer',
-    displayName: 'Customer'
-  },
-  {
-    name: 'staff',
-    displayName: 'Staff'
-  }
-]
+import RoleService from '@/services/RoleService'
 
 const router = useRouter()
 
 const toast = inject('toast')
 const loading = inject('loading')
 
-const roles = ref(ROLE_LIST)
+const roles = ref([])
 
 const formData = ref({
   name: '',
@@ -166,6 +148,15 @@ const formRules = {
 
 const $v = useVuelidate(formRules, formData)
 // Methods
+// Get role list
+const getRoles = async () => {
+  try {
+    const { data } = await RoleService.getList()
+    roles.value = data.data.roles
+  } catch (error) {
+    toast.error("Can't get role list")
+  }
+}
 // Submit
 const submit = async () => {
   try {
@@ -196,6 +187,14 @@ const submit = async () => {
     loading.hide()
   }
 }
+
+const init = async () => {
+  await getRoles()
+}
+
+onMounted(async () => {
+  await init()
+})
 </script>
 
 <style lang="scss" scoped>
