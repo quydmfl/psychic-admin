@@ -1,5 +1,6 @@
 import { defineComponent, h, onMounted, ref, resolveComponent } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { useUserStore } from '@/store/user'
 
 import {
   CBadge,
@@ -51,6 +52,7 @@ const AppSidebarNav = defineComponent({
   },
   setup () {
     const route = useRoute()
+    const userStore = useUserStore()
     const firstRender = ref(true)
 
     onMounted(() => {
@@ -84,7 +86,8 @@ const AppSidebarNav = defineComponent({
           RouterLink,
           {
             to: item.to,
-            custom: true
+            class: 'text-decoration-none'
+            // custom: true
           },
           {
             default: (props) =>
@@ -92,7 +95,7 @@ const AppSidebarNav = defineComponent({
                 resolveComponent(item.component),
                 {
                   active: props.isActive,
-                  href: props.href,
+                  href: '#',
                   onClick: () => props.navigate()
                 },
                 {
@@ -133,7 +136,12 @@ const AppSidebarNav = defineComponent({
         CSidebarNav,
         {},
         {
-          default: () => nav.map((item) => renderItem(item))
+          default: () =>
+            nav
+              .filter(
+                (item) => !item.hide || !item.hide.includes(userStore.role)
+              )
+              .map((item) => renderItem(item))
         }
       )
   }

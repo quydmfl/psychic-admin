@@ -1,27 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DefaultLayout from '../layouts/DefaultLayout.vue'
-import LoginPage from '../views/LoginPage.vue'
-import AdminPage from '../views/AdminPage.vue'
-
-const routes = [
-  {
-    path: '/',
-    component: DefaultLayout,
-    children: [
-      {
-        path: '/dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/AdminPage.vue')
-      }
-    ]
-  },
-  { path: '/login', component: LoginPage },
-  { path: '/admin', component: AdminPage }
-]
+import routes from './routes'
+import { useUserStore } from '@/store/user'
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+const whiteList = ['login']
+router.beforeEach((to, from, next) => {
+  if (whiteList.includes(to.name)) {
+    next()
+  } else {
+    const userStore = useUserStore()
+    if (userStore.isAuthenticated) {
+      if (!userStore.role) {
+        userStore.setUserInfo()
+      }
+      return next()
+    } else {
+      router.push('/login')
+    }
+  }
 })
 
 export default router
