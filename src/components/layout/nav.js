@@ -35,29 +35,19 @@ export default [
   },
   {
     component: 'CNavGroup',
-    name: 'Pages',
-    to: '/pages',
+    name: 'Product Management',
+    to: '/products',
     icon: 'cil-star',
     items: [
       {
         component: 'CNavItem',
-        name: 'Login',
-        to: '/pages/login'
+        name: 'Product List',
+        to: '/products'
       },
       {
         component: 'CNavItem',
-        name: 'Register',
-        to: '/pages/register'
-      },
-      {
-        component: 'CNavItem',
-        name: 'Error 404',
-        to: '/pages/404'
-      },
-      {
-        component: 'CNavItem',
-        name: 'Error 500',
-        to: '/pages/500'
+        name: 'Add Product',
+        to: '/products/add'
       }
     ]
   }

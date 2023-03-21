@@ -1705,6 +1705,11 @@ make-dir@^3.0.2:
   dependencies:
     semver "^6.0.0"
 
+maska@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/maska/-/maska-2.1.7.tgz#225a1124b311ccd603379cdf3d18920fbee27c54"
+  integrity sha512-WMQzwCgFN2lQf8opJwHwdik7YQ1F8IggGEPdky6qyaaKaE9fUCc8wfbx0U4SfnFiPTsE3/5PzI0Qka4xTBczrw==
+
 mime-db@1.52.0:
   version "1.52.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
@@ -2318,6 +2323,11 @@ vue-demi@*, vue-demi@^0.13.11:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.11.tgz#7d90369bdae8974d87b1973564ad390182410d99"
   integrity sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==
+
+vue-easy-lightbox@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/vue-easy-lightbox/-/vue-easy-lightbox-1.15.0.tgz#c04803471e06122996924ef625d6b4e3ba13d5ff"
+  integrity sha512-iPjNmCHHUZQdmJoM85pBNwPqY93KKPOpWPuHPMq7VD3V0CSa/gzrf+Aa7cD/rhD0rAxxE13cvN9AozRTDgIBRw==
 
 vue-eslint-parser@^9.0.1:
   version "9.1.0"
