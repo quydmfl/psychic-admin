@@ -44,7 +44,7 @@
                       <div class="action-icon" @click="viewDetail(row)">
                         <CIcon icon="cil-search" />
                       </div>
-                      <div class="action-icon">
+                      <div class="action-icon" @click="updateProduct(row.id)">
                         <CIcon icon="cil-pencil" />
                       </div></div
                   ></CTableDataCell>
@@ -69,13 +69,11 @@
       <CModalBody>
         <CRow>
           <CCol :md="5">
-            <CCard>
-            </CCard>
+            <CCard> </CCard>
           </CCol>
           <CCol :md="7">
             <CCard>
-              <CCardBody>
-              </CCardBody>
+              <CCardBody> </CCardBody>
             </CCard>
           </CCol>
         </CRow>
@@ -87,7 +85,10 @@
 <script setup>
 import { onMounted, ref, inject } from 'vue'
 import ProductService from '@/services/ProductService'
+import { useRouter } from 'vue-router'
 import 'vue3-carousel/dist/carousel.css'
+
+const router = useRouter()
 
 const toast = inject('toast')
 const loading = inject('loading')
@@ -129,7 +130,22 @@ const productDetail = ref(null)
 // Methods
 const viewDetail = (_product) => {
   productDetail.value = _product
-  showModal.value = true
+  // showModal.value = true
+  router.push({
+    name: 'Product Detail',
+    params: {
+      id: _product.id
+    }
+  })
+}
+// Update product
+const updateProduct = (id) => {
+  router.push({
+    name: 'Update Product',
+    params: {
+      id
+    }
+  })
 }
 // Get product list
 const getProducts = async () => {

@@ -101,12 +101,14 @@ import {
 } from '@vuelidate/validators'
 import UserService from '@/services/UserService'
 import RoleService from '@/services/RoleService'
+import OrganizationService from '@/services/OrganizationService'
 
 const router = useRouter()
 
 const toast = inject('toast')
 const loading = inject('loading')
 
+const organizations = ref([])
 const roles = ref([])
 
 const formData = ref({
@@ -114,7 +116,8 @@ const formData = ref({
   email: '',
   password: '',
   confirmPassword: '',
-  role: ''
+  role: null,
+  organizationId: ''
 })
 
 const formRules = {
@@ -148,6 +151,15 @@ const formRules = {
 
 const $v = useVuelidate(formRules, formData)
 // Methods
+// Get organization list
+const getOrganizations = async () => {
+  try {
+    const { data } = await OrganizationService.getList()
+    organizations.value = data.data.organizations
+  } catch (error) {
+    toast.error("Can't get role list")
+  }
+}
 // Get role list
 const getRoles = async () => {
   try {
@@ -168,6 +180,7 @@ const submit = async () => {
 
     await UserService.createUser({
       ...formData.value,
+      role: Number(formData.value.role),
       passwordConfirm: formData.value.confirmPassword
     })
     toast.success('Add user successfully')
@@ -189,7 +202,9 @@ const submit = async () => {
 }
 
 const init = async () => {
-  await getRoles()
+  await Promise.all([
+    getRoles(), getOrganizations()
+  ])
 }
 
 onMounted(async () => {

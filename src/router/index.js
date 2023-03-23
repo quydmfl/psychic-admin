@@ -7,7 +7,7 @@ const router = createRouter({
   routes
 })
 
-const whiteList = ['login']
+const whiteList = ['login', 'Not Found']
 router.beforeEach((to, from, next) => {
   if (whiteList.includes(to.name)) {
     next()

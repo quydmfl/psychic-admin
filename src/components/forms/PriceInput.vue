@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { vMaska } from 'maska'
 
 // Props
@@ -25,10 +25,14 @@ const props = defineProps({
 // Emit
 const emit = defineEmits(['update:modelValue'])
 
-const maskedValue = ref(props.modelValue)
+const maskedValue = ref()
 const boundObject = ref({})
 
 const onMaska = () => {
   emit('update:modelValue', boundObject.value.unmasked)
 }
+
+watchEffect(() => {
+  maskedValue.value = props.modelValue
+})
 </script>
