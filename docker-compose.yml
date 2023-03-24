@@ -1,23 +1,22 @@
-version: '3.8'
+version: '3'
 
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    platform: linux/arm64/v8
     restart: unless-stopped
     volumes:
       - ./:/usr/src/app
     expose:
-      - "8080"
+      - "3000"
     ports:
-      - "8080:8080"
+      - "4000:3000"
     command: >
-      bash -c "npm i webpack-dev-server && npm start"
+      bash -c "yarn dev --port=3000"
     networks:
       - psychic-fe
 networks:
   psychic-fe:
-    name: psychic_network
+    # name: psychic_network
     driver: bridge
