@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 # Copy package
 COPY package*.json ./
-RUN yarn install
+# RUN yarn install
 
 # Copy source
 COPY . .

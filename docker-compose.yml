@@ -13,7 +13,7 @@ services:
     ports:
       - "4000:3000"
     command: >
-      bash -c "yarn dev --port=3000"
+      bash -c "yarn install && yarn dev --port=3000"
     networks:
       - psychic-fe
 networks:
