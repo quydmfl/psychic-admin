@@ -1,6 +1,10 @@
 import api from '@/plugins/api'
 
 const UserService = {
+  getById (id, params = {}) {
+    const url = `/users/${id}`
+    return api.get(url, { params })
+  },
   getList (params = {}) {
     const url = '/users'
     return api.get(url, { params })
