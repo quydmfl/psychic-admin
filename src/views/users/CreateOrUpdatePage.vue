@@ -79,9 +79,17 @@
               <div class="error-msg">{{ error.$message }}</div>
             </div>
             <!-- Organization -->
-            <CFormSelect v-model="formData.organizationId" class="mb-3" label="Organization">
+            <CFormSelect
+              v-model="formData.organizationId"
+              class="mb-3"
+              label="Organization"
+            >
               <option value="">Select organization</option>
-              <option v-for="org in organizations" :key="org.id" :value="org.id">
+              <option
+                v-for="org in organizations"
+                :key="org.id"
+                :value="org.id"
+              >
                 {{ org.name }}
               </option>
             </CFormSelect>
@@ -105,7 +113,7 @@
 <script setup>
 import { ref, inject, onMounted } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import {
   required,
   email,
@@ -117,11 +125,13 @@ import UserService from '@/services/UserService'
 import RoleService from '@/services/RoleService'
 import OrganizationService from '@/services/OrganizationService'
 
+const route = useRoute()
 const router = useRouter()
 
 const toast = inject('toast')
 const loading = inject('loading')
 
+const user = ref({})
 const organizations = ref([])
 const roles = ref([])
 
@@ -161,7 +171,9 @@ const formRules = {
     )
   },
   role: { required: helpers.withMessage('Role is required', required) },
-  organizationId: { required: helpers.withMessage('Organization is required', required) }
+  organizationId: {
+    required: helpers.withMessage('Organization is required', required)
+  }
 }
 
 const $v = useVuelidate(formRules, formData)
@@ -182,6 +194,15 @@ const getRoles = async () => {
     roles.value = data.data.roles
   } catch (error) {
     toast.error("Can't get role list")
+  }
+}
+// Get user
+const getUser = async (id) => {
+  try {
+    const { data } = await UserService.getById(id)
+    user.value = data.data.user
+  } catch (error) {
+    toast.error("Can't get user")
   }
 }
 // Submit
@@ -218,9 +239,24 @@ const submit = async () => {
 }
 
 const init = async () => {
-  await Promise.all([
-    getRoles(), getOrganizations()
-  ])
+  loading.show()
+  const userId = route.params.id
+  if (userId) {
+    await getUser(userId)
+    if (!user.value) {
+      router.push({ name: 'Not Found' })
+      return
+    }
+    formData.value = {
+      name: user.value.name,
+      email: user.value.email,
+      role: user.value.role,
+      organizationId: user.value.organizationId
+    }
+  }
+
+  await Promise.all([getRoles(), getOrganizations()])
+  loading.hide()
 }
 
 onMounted(async () => {

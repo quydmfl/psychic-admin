@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 
 const api = axios.create({
@@ -27,6 +27,7 @@ api.interceptors.response.use(
     ) {
       const userStore = useUserStore()
       userStore.logout()
+      const router = useRouter()
       router.push('/login')
       return
     }
