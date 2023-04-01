@@ -4,7 +4,7 @@ import { useUserStore } from '@/store/user'
 
 const api = axios.create({
   baseURL:
-    (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000') + '/api'
+    (import.meta.env.VITE_API_BASE_URL || 'http://service.super-star.site') + '/api'
 })
 // api.defaults.withCredentials = true
 // Request
